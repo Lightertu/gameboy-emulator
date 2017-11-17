@@ -15,28 +15,14 @@
 */
 class Register {
 public:
-
-	static std::uint8_t $A;
-	static std::uint8_t $B;
-	static std::uint8_t $C;
-	static std::uint8_t $D;
-	static std::uint8_t $E;
-	static std::uint8_t $F;
-	static std::uint8_t $H;
-	static std::uint8_t $L;
-
-	static std::uint16_t $SP; //stackpointer only
-	static std::uint16_t $PC; //global pc only
-
-public:
 	Register();
 	virtual ~Register();
 
 	static void resetRegisters();
-	static void write8(std::string registerName, std::uint8_t hexValue);
-	static std::uint8_t read8(std::string registerName);
-	static void write16(std::string registerName, std::uint16_t hexValue);
-	static std::uint16_t read16(std::string registerName);
+  	static void write8(int registerName, std::uint8_t hexValue);
+  	static std::uint8_t read8(int registerName);
+  	static void write16(int registerName, std::uint16_t hexValue);
+  	static std::uint16_t read16(int registerName);
 	static bool isCarry();
 	static bool isHCarry();
 	static bool isZero();
@@ -52,7 +38,7 @@ public:
 	static void reset_flag_half_carry();
 	static void reset_flag_carry();
 
-	static void printRegisters();
+  //static void printRegisters();
 };
 
 

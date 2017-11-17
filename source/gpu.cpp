@@ -94,7 +94,6 @@ void GPU::gpu_step(SDL_Renderer *gRenderer){
 		uint32_t *upixels = (uint32_t*) pixels;
 		memcpy(upixels, &color_screen, (sizeof(uint32_t) * 160 * 144));
 		SDL_UnlockTexture(newTexture);
-		SDL_RenderClear( gRenderer );
 		SDL_RenderCopy( gRenderer, newTexture, NULL, NULL );
 		SDL_RenderPresent( gRenderer );
 	  } else {
@@ -180,57 +179,7 @@ void GPU::renderScanLine(SDL_Renderer *gRenderer, int line){
               }
               //SDLoffset++;
             }
-            
-
-            
-          }
         }
+     }
   }
-
-
-
-   /* if the sprite is on */
-   if ( GPU::isSpriteOn ) {
-	   for (int i = 0; i < 40; i++) {
-   		   Sprite* cur_sprite = &Memory::spriteCollection[i];
-                   
-                   
-                   
-               //std::cout << "tile number" << (int) cur_sprite->tile << std::endl;
-
-            //    //std::cout << "xpos" << (int) cur_sprite->xpos << std::endl;
-            //    std::cout << "ypos" << (int) cur_sprite->xpos << std::endl;
-            //    std::cout << "yflip" << (int) cur_sprite->priority << std::endl;
-            //    std::cout << "xflip" << (int) cur_sprite->priority << std::endl;
-            //    std::cout << "priority" << (int) cur_sprite->priority << std::endl;
-            //    std::cout << "palette" << (int) cur_sprite->palette << std::endl;
-    //
-    //		   if (if this sprite falls on the scanLine) {
-    //			   uint8_t pallatte   = getPallatte for this sprite
-    //			   uint8_t canvasoffs = get where to render on the SCREEN_WIDTH
-    //			   uint8_t tilerow;
-    //			   if (cur_sprite->yflip) {
-    //				   // if the sprite is y-flipped use the opposite side of the tile
-    //				   tilerow = getTileRow(cur_sprite->tile, opposite_row);
-    //			   } else {
-    //				   tilerow = getTileRow(cur_sprite->tile, row);
-    //			   }
-    //
-    //			   uint8_t color;
-    //
-    //			   for (int i = 0; i < 8; i++) {
-    //				   // if this pixel is still on-screen
-    //				   // if it is not color 0
-    //				   // if this sprite has priority or shows under the background
-    //				   // then render the pixel
-    //				   if ( all the conditions above met) {
-    //					   //render
-    //
-    // s
-    //
-    //				   }
-    //			   }
-    //		   }
-       }
-   }
 }

@@ -4,7 +4,22 @@
 Memory::Memory(){};
 Memory::~Memory(){};
 
+#define $A 1
+#define $F 0
+#define $B 3
+#define $C 2
+#define $D 5
+#define $E 4
+#define $H 7
+#define $L 6
 
+#define $AF 0
+#define $BC 1
+#define $DE 2
+#define $HL 3
+#define $SP 4
+#define $PC 5
+ 
 
 /* initializing all memory */
 std::uint8_t Memory::bootMem[0x100];
@@ -62,6 +77,7 @@ void Memory::printMemory(uint16_t index1, uint16_t index2){
 }
 
 void Memory::write(uint16_t index, std::uint8_t hexValue){
+  //std::cout << "writing: " << (std::hex) << (int) index << std::endl;
 	if(index >= 0x0000 && index <= 0x7FFF){
 		if(index < 0x100){ bootMem[index] = hexValue; }
 		cartROM[index] = hexValue;
@@ -75,9 +91,8 @@ void Memory::write(uint16_t index, std::uint8_t hexValue){
 		index = index - 0xC000;
 		WRAM[index] = hexValue;
 	} else if(index >= 0xE000 && index <= 0xFDFF){
-		index = index - 0xE000;
-		Memory::write(index-0x2000, hexValue); //copy to other memory from echo
-		ECHO[index] = hexValue;
+	        Memory::write(index-0x2000, hexValue); //copy to other memory from echo
+		ECHO[index - 0xE000] = hexValue;
 	} else if(index >= 0xFE00 && index <= 0xFE9F){
 		updateSpriteCollection(index - 0xFE00, hexValue);
 		OAM[index - 0xFE00] = hexValue;
@@ -94,7 +109,7 @@ void Memory::write(uint16_t index, std::uint8_t hexValue){
 		HRAM[index] = hexValue;
 	} else {
 		std::cout << "error look in memory.cpp write " << std::endl;
-		Register::printRegisters();
+		//Register::printRegisters();
 	}
 }
 
@@ -123,11 +138,11 @@ std::uint8_t Memory::read(uint16_t index) {
 		return HRAM[index - 0xFF80];
 	} else {
 		std::cout << "error look in memory.cpp read: ";
-		std::cout << std::hex << (int)Register::read16("$PC)") << std::endl;
+		std::cout << std::hex << (int)Register::read16($PC) << std::endl;
 		return -1;
 	}
 	std::cout << "error look in memory.cpp read2" << std::endl;
-	std::cout << std::hex << (int)Register::read16("$PC)") << std::endl;
+	std::cout << std::hex << (int)Register::read16($PC) << std::endl;
 	return -1;
 }
 

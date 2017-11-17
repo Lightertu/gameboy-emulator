@@ -4,6 +4,23 @@ ALU::ALU(){};
 ALU::~ALU(){};
 
 
+#define $A 1
+#define $F 0
+#define $B 3
+#define $C 2
+#define $D 5
+#define $E 4
+#define $H 7
+#define $L 6
+
+#define $AF 0
+#define $BC 1
+#define $DE 2
+#define $HL 3
+#define $SP 4
+#define $PC 5
+ 
+
 /*
 Description:
  Add n to A.
@@ -16,8 +33,8 @@ Flags affected:
 
 //NOTE:changed get rid of the extra argument, since add is only used for a
 uint8_t ALU::add_8(uint8_t b) {
-    unsigned int result     = Register::read8("$A") + b;
-    unsigned int halfResult = (Register::read8("$A") & 0x0F) + (b & 0x0F);
+    unsigned int result     = Register::read8($A) + b;
+    unsigned int halfResult = (Register::read8($A) & 0x0F) + (b & 0x0F);
     uint8_t returnResult    = (uint8_t) (result & 0xFF);
     //C flag
     if (result > 0xFF) Register::set_flag_carry();
@@ -51,8 +68,8 @@ Use with:
 //NOTE: got rid of extra argument since it is always performed on A
 uint8_t ALU::adc_8(uint8_t b){
   uint8_t carry           = (((uint8_t) Register::isCarry()) & 1 );
-  unsigned int result     = Register::read8("$A") + b + carry;
-  unsigned int halfResult = (Register::read8("$A") & 0x0F) + (b & 0x0F) + carry;
+  unsigned int result     = Register::read8($A) + b + carry;
+  unsigned int halfResult = (Register::read8($A) & 0x0F) + (b & 0x0F) + carry;
   uint8_t returnResult    = (uint8_t) (result & 0xFF);
 
 
@@ -87,19 +104,19 @@ Flags affected:
 */
 uint8_t ALU::sub_8(uint8_t b){
   //C flag
-  if (Register::read8("$A") < b) Register::set_flag_carry();
+  if (Register::read8($A) < b) Register::set_flag_carry();
   else Register::reset_flag_carry();
 
   //H flag
-  if ((Register::read8("$A") & 0x0F) < (b & 0x0F)) Register::set_flag_half_carry();
+  if ((Register::read8($A) & 0x0F) < (b & 0x0F)) Register::set_flag_half_carry();
   else Register::reset_flag_half_carry();
 
   //Z flag
-  if (Register::read8("$A") == b) Register::set_flag_zero();
+  if (Register::read8($A) == b) Register::set_flag_zero();
   else Register::reset_flag_zero();
 
   Register::set_flag_sub();
-  return Register::read8("$A") - b;
+  return Register::read8($A) - b;
 }
 
 
@@ -119,20 +136,20 @@ uint8_t ALU::sbc_8(uint8_t b){
 
   uint8_t carry = Register::isCarry();
 
-  if (Register::read8("$A") < (b + carry)) Register::set_flag_carry();
+  if (Register::read8($A) < (b + carry)) Register::set_flag_carry();
   else Register::reset_flag_carry();
 
   //H flag
-  if ((Register::read8("$A") & 0x0F) < ((b & 0x0F) + carry)) Register::set_flag_half_carry();
+  if ((Register::read8($A) & 0x0F) < ((b & 0x0F) + carry)) Register::set_flag_half_carry();
   else Register::reset_flag_half_carry();
 
   //Z flag
-  if (Register::read8("$A") == (b + carry)) Register::set_flag_zero();
+  if (Register::read8($A) == (b + carry)) Register::set_flag_zero();
   else Register::reset_flag_zero();
 
 
   Register::set_flag_sub();
-  return Register::read8("$A") - b - carry;
+  return Register::read8($A) - b - carry;
 }
 
 
@@ -150,7 +167,7 @@ Flags affected:
 NOTE: this instruction DOES NOT have a destination specified because it is implied as ALWAYS being register A.
 */
 uint8_t ALU::and_8(uint8_t b) {
-  uint8_t isTrue = (Register::read8("$A") & b);
+  uint8_t isTrue = (Register::read8($A) & b);
 
   if (!isTrue) Register::set_flag_zero();
   else Register::reset_flag_zero();
@@ -178,7 +195,7 @@ Flags affected:
 */
 uint8_t ALU::or_8(uint8_t b) {
 
-  uint8_t isFalse = (Register::read8("$A") | b);
+  uint8_t isFalse = (Register::read8($A) | b);
 
   if (!isFalse) Register::set_flag_zero();
   else Register::reset_flag_zero();
@@ -204,7 +221,7 @@ Flags affected:
  C - Reset.
 */
 uint8_t ALU::xor_8(uint8_t b) {
-  uint8_t isFalse = (Register::read8("$A") ^ b);
+  uint8_t isFalse = (Register::read8($A) ^ b);
 
   if (!isFalse) Register::set_flag_zero();
   else Register::reset_flag_zero();
@@ -233,15 +250,15 @@ Flags affected:
 */
 void ALU::cp_8(uint8_t b) {
   //C flag
-  if (Register::read8("$A") < b) Register::set_flag_carry();
+  if (Register::read8($A) < b) Register::set_flag_carry();
   else Register::reset_flag_carry();
 
   //H flag
-  if ((Register::read8("$A") & 0x0F) < (b & 0x0F)) Register::set_flag_half_carry();
+  if ((Register::read8($A) & 0x0F) < (b & 0x0F)) Register::set_flag_half_carry();
   else Register::reset_flag_half_carry();
 
   //Z flag
-  if (Register::read8("$A") == b) Register::set_flag_zero();
+  if (Register::read8($A) == b) Register::set_flag_zero();
   else Register::reset_flag_zero();
 
   Register::set_flag_sub();
@@ -321,8 +338,8 @@ Flags affected:
  C - Set if carry from bit 15.
 */
 uint16_t ALU::add_hl(uint16_t b) {
-    unsigned int result     = Register::read16("$HL") + b;
-    unsigned int halfResult = (Register::read16("$HL") & 0x0FFF) + (b & 0x0FFF);
+    unsigned int result     = Register::read16($HL) + b;
+    unsigned int halfResult = (Register::read16($HL) & 0x0FFF) + (b & 0x0FFF);
     uint16_t returnResult   = (uint16_t) (result & 0xFFFF);
     Register::reset_flag_sub();
 
@@ -346,12 +363,12 @@ Flags affected:
  C - Set or reset according to operation.
 */
 uint16_t ALU::add_sp(int8_t b) {
-    int result = Register::read16("$SP") + b;
+    int result = Register::read16($SP) + b;
 
     if(result & 0xFFFF0000) Register::set_flag_carry();
     else Register::reset_flag_carry();
 
-    if(((Register::read16("$SP") & 0x0F) + b) > 0x0F) Register::set_flag_half_carry();
+    if(((Register::read16($SP) & 0x0F) + b) > 0x0F) Register::set_flag_half_carry();
     else Register::reset_flag_half_carry();
 
     Register::reset_flag_sub();
@@ -379,7 +396,6 @@ uint8_t ALU::rotate_left_to_carry(uint8_t a){
 
    if (newBit0) Register::set_flag_carry();
    else Register::reset_flag_carry();
-
    if (!result) Register::set_flag_zero();
    else Register::reset_flag_zero();
 

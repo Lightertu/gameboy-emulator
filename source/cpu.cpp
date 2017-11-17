@@ -4,21 +4,37 @@
 #include <iomanip>
 
 
+
+#define $A 1
+#define $F 0
+#define $B 3
+#define $C 2
+#define $D 5
+#define $E 4
+#define $H 7
+#define $L 6
+
+#define $AF 0
+#define $BC 1
+#define $DE 2
+#define $HL 3
+#define $SP 4
+#define $PC 5
+ 
+
 CPU::CPU(){};
 CPU::~CPU(){};
-
-long CPU::_clock;
-
-
-uint16_t CPU::_lastTick;
 
 extern SDL_Window *gWindow;
 extern SDL_Renderer *gRenderer;
 
+long CPU::_clock;
+uint16_t CPU::_lastTick;
+
 void CPU::incrClockBy(uint8_t incr) { CPU::_clock += incr; }
 long CPU::getClock() { return CPU::_clock; }
 uint16_t CPU::getLastTick() { return CPU::_lastTick; }
-void CPU::incrPCby(uint8_t incr) { Register::write16("$PC", (Register::read16("$PC") + incr)); }
+void CPU::incrPCby(uint8_t incr) { Register::write16($PC, (Register::read16($PC) + incr)); }
 
 bool CPU::isBootDone() {
 	return Memory::read(0xFF50);
@@ -58,15 +74,6 @@ void CPU::run() {
             KEYS::key_select = 1;
           if(keystate[SDL_SCANCODE_Q])
             play = false;
-          /*
-          uint8_t x = KEYS::read_keys();
-          if(i % 2 == 0){
-            KEYS::write_keys(0x1F);
-          }else{
-            KEYS::write_keys(0x2F);
-          }
-          std::cout << std::bitset<8>(x) << std::endl;
-          */
 	  CPU::decode();
 	  ISA::handle_interrupts();
           GPU::gpu_step(gRenderer);
@@ -77,13 +84,14 @@ void CPU::run() {
 
 
 void CPU::decode(){
-	uint8_t instruction = Memory::read(Register::read16("$PC"));
-	uint8_t arg1 = Memory::read(Register::read16("$PC") + 0x01);
-	uint8_t arg2 = Memory::read(Register::read16("$PC") + 0x02);
+  uint16_t PC = Register::read16($PC);
+	uint8_t instruction = Memory::read(PC);
+	uint8_t arg1 = Memory::read(PC + 0x01);
+	uint8_t arg2 = Memory::read(PC + 0x02);
 	uint16_t arg16 = (arg2 << 8) | arg1;
 	incrPCby(DataBank::numbInstructions[instruction]);
 	incrClockBy(DataBank::instructionTicks[instruction]);
-    CPU::_lastTick = DataBank::instructionTicks[instruction];
+        CPU::_lastTick = DataBank::instructionTicks[instruction];
 
 	switch(instruction){
 		case 0x00 : ISA::nop(); break;
@@ -346,8 +354,7 @@ void CPU::decode(){
 }
 
 void CPU::extendedDecode(){
-	uint16_t PC = Register::read16("$PC");
-	uint8_t instruction = Memory::read(PC);
+	uint8_t instruction = Memory::read(Register::read16($PC));
 	incrPCby(0x01);
 	switch (instruction){
 		case 0x00 : ISA::rlc_b(); break;

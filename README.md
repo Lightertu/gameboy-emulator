@@ -1,18 +1,22 @@
-# Gameboy Emulator
+# QuackPack-GameBoyEmulator
+Initially uploaded to Bitbucket, added finished work to GitHub.
 
-A gameboy emulator implemented in C/C++ using SDL2 (Only works on Linux so far)
+GAMEBOY EMULATOR
+What is this repository for?
 
-HOW TO USE: 
-  - Install SDL2 and make sure it is in your path
-  - change the ROM file name in main.cpp. NOTE: it has to be a .txt file
-  - make
-  - ./main
+    It plays 32KB Gameboy Games. It is also a Sharp LR35902 Chip emulator, any binary files written for this chip will work here.
+    Version 1.0
 
+How do I get set up?
 
-# TODO list
-  - Implementing bank switching
-  - Create a GUI for loading ROM file
-  - Optimizing the speed
+    Configuration
 
+    Dependencies SDL2
 
-Original Contributors: Trace Anderson, Rui Tu, Andrew Hill, Haley Whitman
+    Once dependencies are installed, just run make and ./main. Add your own binary file, which can be changed through the main file.
+
+Contribution guidelines
+Who do I talk to?
+
+    Haley Whitman
+
