@@ -14,9 +14,3 @@ How do I get set up?
     Dependencies SDL2
 
     Once dependencies are installed, just run make and ./main. Add your own binary file, which can be changed through the main file.
-
-Contribution guidelines
-Who do I talk to?
-
-    Haley Whitman
-
