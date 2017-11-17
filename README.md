@@ -1,4 +1,4 @@
-# QuackPack-GameBoyEmulator
+# GameBoy Emulator
 Initially uploaded to Bitbucket, added finished work to GitHub.
 
 GAMEBOY EMULATOR
